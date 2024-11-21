@@ -1,0 +1,54 @@
+[root@KNA-server ~]# curl ifconfig.me/all
+ip_addr: 93.183.72.17
+remote_host: unavailable
+user_agent: curl/7.61.1
+port: 40416
+language: 
+referer: 
+connection: 
+keep_alive: 
+method: GET
+encoding: 
+mime: */*
+charset: 
+via: 1.1 google
+forwarded: 93.183.72.17,34.160.111.145
+[root@KNA-server ~]# ip addr show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2: enp0s5: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether ca:0b:52:90:e7:93 brd ff:ff:ff:ff:ff:ff
+    inet 93.183.72.17/24 brd 93.183.72.255 scope global noprefixroute enp0s5
+       valid_lft forever preferred_lft forever
+[root@KNA-server ~]# curl ifconfig.me
+93.183.72.17[root@KNA-server ~]# mkfifo my_pipe
+[root@KNA-server ~]# ss -plnt > my_pipe &
+[1] 64722
+[root@KNA-server ~]# cat my_pipe > output.txt
+[1]+  Done                    ss -plnt > my_pipe
+[root@KNA-server ~]# cat output.txt
+State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
+LISTEN 0      128          0.0.0.0:22        0.0.0.0:*    users:(("sshd",pid=1123,fd=5))
+[root@KNA-server ~]# ls -a
+.  ..  .bash_history  .bash_logout  .bash_profile  .bashrc  .config  .cshrc  .ssh  .tcshrc  .viminfo  my_pipe  output.txt
+[root@KNA-server ~]# cd /
+[root@KNA-server /]# ls -a
+.  ..  bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+[root@KNA-server /]# mkfifo archive_pipe
+[root@KNA-server /]# tar cf - var/log/messages > archive_pipe &
+[1] 65378
+[root@KNA-server /]# cat archive_pipe > archive.tar
+[1]+  Done                    tar cf - var/log/messages > archive_pipe
+[root@KNA-server /]# date +%s
+1732229657
+[root@KNA-server /]# echo "2024-11-20 01:55:30" | date -d "$(cat)" +%s
+1732067730
+[root@KNA-server /]# cat <<EOF > mnogostrok.txt
+> Первая строка
+> Вторая строка
+> ...
+> N-я строка
+> EOF
+[root@KNA-server /]# 
