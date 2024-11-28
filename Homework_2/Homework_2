@@ -1,0 +1,137 @@
+[root@KNA-server log]# last -7 -f /var/log/wtmp
+root     pts/0        5.18.205.1       Mon Nov 25 12:16   still logged in
+root     pts/0        166.1.157.30     Thu Nov 21 19:23 - 23:08  (03:45)
+root     pts/0        166.1.157.30     Thu Nov 21 09:20 - 12:12  (02:51)
+root     pts/0        5.18.247.152     Wed Nov 20 16:20 - 18:34  (02:14)
+reboot   system boot  5.4.17-2136.310. Mon Nov 18 13:19   still running
+
+wtmp begins Wed Sep 21 08:11:39 2022
+
+[root@KNA-server log]# logger -p kern.info "Послание добра и мира посланникам из Альфа-Центавра"
+[root@KNA-server log]# tail -n 20 /var/log/messages
+Nov 25 17:41:04 KNA-server systemd[1]: Starting User runtime directory /run/user/0...
+Nov 25 17:41:04 KNA-server systemd-logind[669]: New session 9 of user root.
+Nov 25 17:41:04 KNA-server systemd[1]: Started User runtime directory /run/user/0.
+Nov 25 17:41:04 KNA-server systemd[1]: Starting User Manager for UID 0...
+Nov 25 17:41:04 KNA-server systemd[124399]: Reached target Paths.
+Nov 25 17:41:04 KNA-server systemd[124399]: Starting D-Bus User Message Bus Socket.
+Nov 25 17:41:04 KNA-server systemd[124399]: Reached target Timers.
+Nov 25 17:41:04 KNA-server systemd[124399]: Listening on D-Bus User Message Bus Socket.
+Nov 25 17:41:04 KNA-server systemd[124399]: Reached target Sockets.
+Nov 25 17:41:04 KNA-server systemd[124399]: Reached target Basic System.
+Nov 25 17:41:04 KNA-server systemd[124399]: Reached target Default.
+Nov 25 17:41:04 KNA-server systemd[124399]: Startup finished in 56ms.
+Nov 25 17:41:04 KNA-server systemd[1]: Started User Manager for UID 0.
+Nov 25 17:41:04 KNA-server systemd[1]: Started Session 9 of user root.
+Nov 25 17:45:12 KNA-server kernel: clocksource: timekeeping watchdog on CPU0: hpet wd-wd read-back delay of 681459ns
+Nov 25 17:45:12 KNA-server kernel: clocksource: wd-tsc-wd read-back delay of 135183ns, clock-skew test skipped!
+Nov 25 18:18:02 KNA-server root[124999]: Послание добра и мира посланникам из Альфа-Центавра
+Nov 25 18:18:51 KNA-server root[125011]: Послание добра и мира посланникам из Альфа-Центавра
+Nov 25 18:19:15 KNA-server root[125022]: Послание добра и мира посланникам из Альфа-Центавра
+Nov 25 18:20:19 KNA-server root[125039]: Послание добра и мира посланникам из Альфа-Центавра
+
+[root@KNA-server ~]# journalctl -u systemd-logind -n 25
+-- Logs begin at Mon 2024-11-18 13:19:41 UTC, end at Mon 2024-11-25 18:15:23 UTC. --
+Nov 20 16:20:07 KNA-server.local systemd-logind[669]: New session 1 of user root.
+Nov 20 18:34:17 KNA-server.local systemd-logind[669]: Session 1 logged out. Waiting for processes to exit.
+Nov 20 18:34:17 KNA-server.local systemd-logind[669]: Removed session 1.
+Nov 21 09:20:26 KNA-server.local systemd-logind[669]: New session 3 of user root.
+Nov 21 12:12:07 KNA-server.local systemd-logind[669]: Session 3 logged out. Waiting for processes to exit.
+Nov 21 12:12:07 KNA-server.local systemd-logind[669]: Removed session 3.
+Nov 21 19:23:04 KNA-server.local systemd-logind[669]: New session 5 of user root.
+Nov 21 23:08:52 KNA-server.local systemd-logind[669]: Session 5 logged out. Waiting for processes to exit.
+Nov 21 23:08:52 KNA-server.local systemd-logind[669]: Removed session 5.
+Nov 25 12:16:51 KNA-server.local systemd-logind[669]: New session 7 of user root.
+Nov 25 12:34:37 KNA-server.local systemd-logind[669]: Session 7 logged out. Waiting for processes to exit.
+Nov 25 12:34:37 KNA-server.local systemd-logind[669]: Removed session 7.
+Nov 25 17:41:04 KNA-server.local systemd-logind[669]: New session 9 of user root.
+
+[root@KNA-server etc]# touch /var/log/my.log
+[root@KNA-server etc]# nano /etc/rsyslog.conf
+[root@KNA-server etc]# #строчка *.info      var/log/my.log добавлена в rsyslog.conf
+[root@KNA-server etc]# sudo chmod 640 /var/log/my.log
+[root@KNA-server etc]# systemctl restart rsyslog
+[root@KNA-server etc]# logger -p user.info "Проверка конфигурации rsyslog"
+[root@KNA-server etc]# tail -n 10 /var/log/my.log
+Nov 25 19:24:43 KNA-server systemd[1]: Stopping System Logging Service...
+Nov 25 19:24:44 KNA-server rsyslogd[126017]: [origin software="rsyslogd" swVersion="8.2102.0-7.el8_6.1" x-pid="126017" x-info="https://www.rsyslog.com"] exiting on signal 15.
+Nov 25 19:24:44 KNA-server systemd[1]: rsyslog.service: Succeeded.
+Nov 25 19:24:44 KNA-server systemd[1]: Stopped System Logging Service.
+Nov 25 19:24:44 KNA-server systemd[1]: Starting System Logging Service...
+Nov 25 19:24:44 KNA-server rsyslogd[126168]: [origin software="rsyslogd" swVersion="8.2102.0-7.el8_6.1" x-pid="126168" x-info="https://www.rsyslog.com"] start
+Nov 25 19:24:44 KNA-server systemd[1]: Started System Logging Service.
+Nov 25 19:24:44 KNA-server rsyslogd[126168]: imjournal: journal files changed, reloading...  [v8.2102.0-7.el8_6.1 try https://www.rsyslog.com/e/0 ]
+Nov 25 19:24:47 KNA-server root[126173]: Проверка конфигурации rsyslog
+
+[root@KNA-server etc]# cd logrotate.d/
+[root@KNA-server logrotate.d]# touch ssh
+[root@KNA-server logrotate.d]# nano ssh
+[root@KNA-server logrotate.d]# cat ssh
+/var/log/ssh.log {
+    daily                
+    size 1M          
+    rotate 10            
+    compress           
+    missingok           
+    notifempty            
+    postrotate
+        systemctl reload rsyslog > /dev/null 2>&1 || true
+    endscript
+}
+[root@KNA-server logrotate.d]# logrotate --debug /etc/logrotate.d/ssh
+WARNING: logrotate in debug mode does nothing except printing debug messages!  Consider using verbose mode (-v) instead if this is not what you want.
+
+reading config file /etc/logrotate.d/ssh
+Reading state from file: /var/lib/logrotate/logrotate.status
+Allocating hash table for state file, size 64 entries
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+Creating new state
+
+Handling 1 logs
+
+rotating pattern: /var/log/ssh.log  1048576 bytes (10 rotations)
+empty log files are not rotated, old logs are removed
+considering log /var/log/ssh.log
+Creating new state
+  Now: 2024-11-25 20:58
+  Last rotated at 2024-11-25 20:00
+  log does not need rotating (log size is below the 'size' threshold)
+[root@KNA-server logrotate.d]# logrotate -f /etc/logrotate.d/ssh
+
+[root@KNA-server /]# journalctl -b
+-- Logs begin at Mon 2024-11-18 13:19:41 UTC, end at Mon 2024-11-25 21:05:04 UTC. --
+//по понятным причинам я не буду вставлять сюда весь лог с запуска
+
+[root@KNA-server /]# journalctl --since "1 hour ago"
+-- Logs begin at Mon 2024-11-18 13:19:41 UTC, end at Mon 2024-11-25 21:15:14 UTC. --
+Nov 25 20:15:32 KNA-server.local sshd[127106]: Connection closed by authenticating user root 218.78.14.255 port 58420 [preauth]
+Nov 25 20:15:33 KNA-server.local sshd[127109]: Connection closed by authenticating user root 218.78.14.255 port 59798 [preauth]
+Nov 25 20:15:37 KNA-server.local sshd[127112]: Connection closed by authenticating user root 218.78.14.255 port 33268 [preauth]
+//
+//эту часть тоже вырежу
+//
+Nov 25 21:13:34 KNA-server.local sshd[127864]: Connection closed by invalid user polycom 43.136.175.74 port 43420 [preauth]
+Nov 25 21:13:52 KNA-server.local sshd[127869]: Connection closed by authenticating user root 43.136.175.74 port 50782 [preauth]
+Nov 25 21:14:17 KNA-server.local sshd[127872]: Connection closed by authenticating user root 43.136.175.74 port 57950 [preauth]
+Nov 25 21:14:38 KNA-server.local sshd[127875]: Connection closed by authenticating user root 43.136.175.74 port 39044 [preauth]
+Nov 25 21:14:56 KNA-server.local sshd[127878]: Connection closed by authenticating user root 43.136.175.74 port 46784 [preauth]
+Nov 25 21:15:14 KNA-server.local sshd[127882]: Connection closed by authenticating user root 43.136.175.74 port 53416 [preauth]
+[root@KNA-server /]#
+
