@@ -1,0 +1,39 @@
+#установка в Cron
+
+echo "*/8 * * * * /path/to/script6.sh -p 10" >> /etc/crontab
+
+#проверка
+
+cat /etc/crontab
+
+#создание Systemd Timer
+
+#файл /etc/systemd/system/check-disk-usage.service:
+
+[Unit]
+Description=Check disk usage and notify if space is low
+
+[Service]
+Type=oneshot
+ExecStart=/path/to/script6.sh -p 10
+
+#создание таймера
+
+#файл /etc/systemd/system/check-disk-usage.timer:
+
+[Unit]
+Description=Run check-disk-usage.service every 8 minutes
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=8min
+
+[Install]
+WantedBy=timers.target
+
+#активация таймера и проверка его состояния
+
+systemctl daemon-reload
+systemctl enable --now check-disk-usage.timer
+systemctl list-timers
+
