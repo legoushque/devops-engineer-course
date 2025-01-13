@@ -1,0 +1,46 @@
+[root@KNA-server ~]# sudo groupadd nginx
+[root@KNA-server ~]# sudo useradd -g nginx -s /sbin/nologin -d /var/www nginx
+[root@KNA-server ~]# sudo setenforce 1
+[root@KNA-server ~]# sudo sed -i 's/SELINUX=permissive/SELINUX=enforcing/' /etc/selinux/config
+[root@KNA-server ~]# sudo mkdir /pubHtml
+[root@KNA-server ~]# sudo chown -R nginx:nginx /pubHtml
+[root@KNA-server ~]# echo "<html><body><h2>test file</h2></body></html>" | sudo tee /pubHtml/index.html
+<html><body><h2>test file</h2></body></html>
+[root@KNA-server ~]# sudo chown nginx:nginx /pubHtml/index.html
+[root@KNA-server ~]# nano /usr/local/nginx/conf/nginx.conf
+#    server {
+#	listen       4589;
+#       server_name  localhost;
+#
+#        #charset koi8-r;
+#
+#        #access_log  logs/host.access.log  main;
+#
+#        location / {
+#            root  /PubHtml;
+#            index  index.html index.htm;
+#        }
+[root@KNA-server ~]# nginx -t
+nginx: the configuration file /usr/local/nginx/conf/nginx.conf syntax is ok
+nginx: configuration file /usr/local/nginx/conf/nginx.conf test is successful
+[root@KNA-server ~]# sudo systemctl restart nginx
+[root@KNA-server ~]# sudo sestatus
+SELinux status:                 enabled
+SELinuxfs mount:                /sys/fs/selinux
+SELinux root directory:         /etc/selinux
+Loaded policy name:             targeted
+Current mode:                   enforcing
+Mode from config file:          enforcing
+Policy MLS status:              enabled
+Policy deny_unknown status:     allowed
+Memory protection checking:     actual (secure)
+Max kernel policy version:      31
+[root@KNA-server ~]# curl http://93.183.72.17:4589
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.24.0</center>
+</body>
+</html>
+

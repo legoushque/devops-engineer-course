@@ -1,0 +1,68 @@
+[root@KNA-server ~]# nc -l -p 12345 -k
+#nikolai@linups:~$ echo "TCP check" | nc 93.183.72.17 12345
+[root@KNA-server ~]#
+TCP check
+^C
+[root@KNA-server ~]# nc -u -l -p 12345
+#nikolai@linups:~$ echo "UDP check" | nc -u 93.183.72.17 12345
+[root@KNA-server ~]#
+UDP check
+[root@KNA-server ~]# sudo tcpdump -i enp0s5 tcp port 12345
+dropped privs to tcpdump
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on enp0s5, link-type EN10MB (Ethernet), capture size 262144 bytes
+#nikolai@linups:~$ echo "TCP check" | nc 93.183.72.17 12345
+13:23:24.287870 IP 166.1.157.30.58711 > KNA-server.local.italk: Flags [S], seq 4054843082, win 64240, options [mss 1460,sackOK,TS val 50937938 ecr 0,nop,wscale 7], length 0
+13:23:24.287946 IP KNA-server.local.italk > 166.1.157.30.58711: Flags [R.], seq 0, ack 4054843083, win 0, length 0
+#nikolai@linups:~$ echo "######################" | nc 93.183.72.17 12345
+13:23:59.060853 IP 166.1.157.30.35781 > KNA-server.local.italk: Flags [S], seq 990760835, win 64240, options [mss 1460,sackOK,TS val 50972705 ecr 0,nop,wscale 7], length 0
+13:23:59.060899 IP KNA-server.local.italk > 166.1.157.30.35781: Flags [R.], seq 0, ack 990760836, win 0, length 0
+#nikolai@linups:~$ echo "TCP check 2" | nc 93.183.72.17 12345
+13:24:56.035763 IP 166.1.157.30.43069 > KNA-server.local.italk: Flags [S], seq 1380616919, win 64240, options [mss 1460,sackOK,TS val 51029686 ecr 0,nop,wscale 7], length 0
+13:24:56.035834 IP KNA-server.local.italk > 166.1.157.30.43069: Flags [R.], seq 0, ack 1380616920, win 0, length 0
+^C
+6 packets captured
+8 packets received by filter
+0 packets dropped by kernel
+[root@KNA-server ~]# sudo tcpdump -i enp0s5 udp port 12345
+dropped privs to tcpdump
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on enp0s5, link-type EN10MB (Ethernet), capture size 262144 bytes
+#nikolai@linups:~$ echo "UDP check" | nc -u 93.183.72.17 12345
+13:29:38.234958 IP 166.1.157.30.57288 > KNA-server.local.italk: UDP, length 10
+#nikolai@linups:~$ echo "UDPudpUDPudpUDP" | nc -u 93.183.72.17 12345
+13:30:08.031321 IP 166.1.157.30.45848 > KNA-server.local.italk: UDP, length 16
+#nikolai@linups:~$ echo "hghjgjhbmjhbjhmhjhghgfgfcfdgfdgbvfbghnghnjhmjjkwemtqcntw" | nc -u 93.183.72.17 12345
+13:30:28.936488 IP 166.1.157.30.35746 > KNA-server.local.italk: UDP, length 57
+^C
+3 packets captured
+5 packets received by filter
+0 packets dropped by kernel
+[root@KNA-server ~]# 
+
+#nikolai@linups:~$ ip link 
+#1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+#    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+#2: enp5s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+#    link/ether b4:2e:99:46:6c:d2 brd ff:ff:ff:ff:ff:ff
+#3: outline-tun0: <POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 500
+#    link/none 
+
+[root@KNA-server ~]# sudo tcpdump -i enp0s5 -e tcp port 12345
+dropped privs to tcpdump
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on enp0s5, link-type EN10MB (Ethernet), capture size 262144 bytes
+14:47:47.162187 d4:6d:50:43:c6:c4 (oui Unknown) > ca:0b:52:90:e7:93 (oui Unknown), ethertype IPv4 (0x0800), length 74: 5x18x205x1.static-business.spb.ertelecom.ru.swiftnet > KNA-server.local.italk: Flags [S], seq 3837446801, win 64240, options [mss 1460,sackOK,TS val 3245171130 ecr 0,nop,wscale 7], length 0
+14:47:47.162236 ca:0b:52:90:e7:93 (oui Unknown) > 00:00:0c:9f:f8:40 (oui Cisco), ethertype IPv4 (0x0800), length 54: KNA-server.local.italk > 5x18x205x1.static-business.spb.ertelecom.ru.swiftnet: Flags [R.], seq 0, ack 3837446802, win 0, length 0
+
+#nikolai@linups:~$ sudo ip link set enp5s0 down
+#nikolai@linups:~$ sudo ip link set enp5s0 address 02:01:02:03:04:08
+#nikolai@linups:~$ sudo ip link set enp5s0 up
+#nikolai@linups:~$ echo "TCP check" | nc 93.183.72.17 12345
+
+[root@KNA-server ~]# sudo tcpdump -i enp0s5 -e tcp port 12345
+dropped privs to tcpdump
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on enp0s5, link-type EN10MB (Ethernet), capture size 262144 bytes
+14:59:20.526375 d4:6d:50:43:c6:c4 (oui Unknown) > ca:0b:52:90:e7:93 (oui Unknown), ethertype IPv4 (0x0800), length 74: 5x18x205x1.static-business.spb.ertelecom.ru.vpvd > KNA-server.local.italk: Flags [S], seq 3788323489, win 64240, options [mss 1460,sackOK,TS val 1363898441 ecr 0,nop,wscale 7], length 0
+14:59:20.526456 ca:0b:52:90:e7:93 (oui Unknown) > 00:00:0c:9f:f8:40 (oui Cisco), ethertype IPv4 (0x0800), length 54: KNA-server.local.italk > 5x18x205x1.static-business.spb.ertelecom.ru.vpvd: Flags [R.], seq 0, ack 3788323490, win 0, length 0

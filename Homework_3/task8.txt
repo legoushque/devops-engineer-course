@@ -1,0 +1,186 @@
+[root@KNA-server ~]# sudo systemctl start nginx
+[root@KNA-server ~]# ps aux | grep nginx
+root        1552  0.0  0.1  42576  3724 ?        Ss   Jan07   0:00 nginx: master process /usr/local/nginx/sbin/nginx
+nobody      1593  0.0  0.2  74748  4692 ?        S    Jan07   0:00 nginx: worker process
+root       52559  0.0  0.0  42440   800 ?        Ss   11:58   0:00 nginx: master process /usr/local/nginx/sbin/nginx
+nobody     52560  0.0  0.2  74632  4884 ?        S    11:58   0:00 nginx: worker process
+root       52562  0.0  0.0   9284  1084 pts/0    R+   11:58   0:00 grep --color=auto nginx
+[root@KNA-server ~]# curl -I http://localhost
+HTTP/1.1 200 OK
+Server: nginx/1.24.0
+Date: Sun, 12 Jan 2025 11:58:27 GMT
+Content-Type: text/html
+Content-Length: 615
+Last-Modified: Tue, 07 Jan 2025 13:42:41 GMT
+Connection: keep-alive
+ETag: "677d2f51-267"
+Accept-Ranges: bytes
+
+[root@KNA-server ~]# clear
+
+[root@KNA-server ~]# curl -I http://192.168.100.2
+HTTP/1.1 200 OK
+Server: nginx/1.24.0
+Date: Sun, 12 Jan 2025 11:59:43 GMT
+Content-Type: text/html
+Content-Length: 615
+Last-Modified: Tue, 07 Jan 2025 13:42:41 GMT
+Connection: keep-alive
+ETag: "677d2f51-267"
+Accept-Ranges: bytes
+
+[root@KNA-server ~]# sudo tcpdump -i enp0s5 icmp -v
+dropped privs to tcpdump
+tcpdump: listening on enp0s5, link-type EN10MB (Ethernet), capture size 262144 bytes
+12:02:46.394817 IP (tos 0x0, ttl 51, id 65487, offset 0, flags [none], proto ICMP (1), length 34)
+    112.48.131.106 > KNA-server.local: ICMP echo request, id 65487, seq 0, length 14
+12:02:46.394881 IP (tos 0x0, ttl 64, id 49725, offset 0, flags [none], proto ICMP (1), length 34)
+    KNA-server.local > 112.48.131.106: ICMP echo reply, id 65487, seq 0, length 14
+12:03:59.174376 IP (tos 0xc0, ttl 64, id 36778, offset 0, flags [none], proto ICMP (1), length 96)
+    KNA-server.local > 223.113.128.250: ICMP KNA-server.local udp port isakmp unreachable, length 76
+	IP (tos 0x0, ttl 49, id 40866, offset 0, flags [DF], proto UDP (17), length 68)
+    223.113.128.250.52660 > KNA-server.local.isakmp: isakmp 0.1 msgid 00000000:
+12:04:37.578061 IP (tos 0xc0, ttl 64, id 29536, offset 0, flags [none], proto ICMP (1), length 84)
+    KNA-server.local > 154.213.187.130: ICMP KNA-server.local udp port domain unreachable, length 64
+	IP (tos 0x0, ttl 56, id 45557, offset 0, flags [none], proto UDP (17), length 56)
+    154.213.187.130.59905 > KNA-server.local.domain: 61460+ ANY? google.com. (28)
+12:07:06.871855 IP (tos 0xc0, ttl 64, id 47303, offset 0, flags [none], proto ICMP (1), length 141)
+    KNA-server.local > ns3102069.ip-145-239-255.eu: ICMP KNA-server.local udp port irdmi unreachable, length 121
+	IP (tos 0x0, ttl 49, id 18522, offset 0, flags [DF], proto UDP (17), length 113)
+    ns3102069.ip-145-239-255.eu.us-srv > KNA-server.local.irdmi: UDP, length 85
+12:08:38.962840 IP (tos 0x0, ttl 236, id 54321, offset 0, flags [none], proto ICMP (1), length 40)
+    ec2-52-81-41-100.cn-north-1.compute.amazonaws.com.cn > KNA-server.local: ICMP echo request, id 44687, seq 0, length 20
+12:08:38.962892 IP (tos 0x0, ttl 64, id 47416, offset 0, flags [none], proto ICMP (1), length 40)
+    KNA-server.local > ec2-52-81-41-100.cn-north-1.compute.amazonaws.com.cn: ICMP echo reply, id 44687, seq 0, length 20
+12:09:05.383083 IP (tos 0x8, ttl 52, id 57471, offset 0, flags [none], proto ICMP (1), length 34)
+    43.154.88.182 > KNA-server.local: ICMP echo request, id 57471, seq 0, length 14
+12:09:05.383134 IP (tos 0x8, ttl 64, id 5835, offset 0, flags [none], proto ICMP (1), length 34)
+    KNA-server.local > 43.154.88.182: ICMP echo reply, id 57471, seq 0, length 14
+12:14:11.699427 IP (tos 0xc0, ttl 64, id 52239, offset 0, flags [none], proto ICMP (1), length 120)
+    KNA-server.local > 212-83-190-55.rev.poneytelecom.eu: ICMP KNA-server.local udp port soundsvirtual unreachable, length 100
+	IP (tos 0x0, ttl 248, id 54321, offset 0, flags [none], proto UDP (17), length 92)
+    212-83-190-55.rev.poneytelecom.eu.39816 > KNA-server.local.soundsvirtual: UDP, length 64
+12:14:29.726719 IP (tos 0xc8, ttl 64, id 47956, offset 0, flags [none], proto ICMP (1), length 64)
+    KNA-server.local > vmi1618630.contaboserver.net: ICMP KNA-server.local udp port sip unreachable, length 44
+	IP (tos 0x8, ttl 45, id 7702, offset 0, flags [DF], proto UDP (17), length 36)
+    vmi1618630.contaboserver.net.48528 > KNA-server.local.sip: SIP
+12:17:56.812941 IP (tos 0xc0, ttl 64, id 35236, offset 0, flags [none], proto ICMP (1), length 60)
+    KNA-server.local > 113.122.67.138: ICMP KNA-server.local udp port ntp unreachable, length 40
+	IP (tos 0x0, ttl 54, id 0, offset 0, flags [DF], proto UDP (17), length 32)
+    113.122.67.138.26819 > KNA-server.local.ntp: NTPv3, length 4
+	Server, Leap indicator:  (0), Stratum 0 (unspecified), poll 0 (1s), precision 0 [|ntp]
+12:18:36.705126 IP (tos 0xc8, ttl 64, id 4108, offset 0, flags [none], proto ICMP (1), length 69)
+    KNA-server.local > 195.24.207.224: ICMP KNA-server.local udp port ms-sql-m unreachable, length 49
+	IP (tos 0x8, ttl 42, id 22358, offset 0, flags [DF], proto UDP (17), length 41)
+    195.24.207.224.45951 > KNA-server.local.ms-sql-m: UDP, length 13
+12:19:09.843951 IP (tos 0xc0, ttl 64, id 49912, offset 0, flags [none], proto ICMP (1), length 178)
+    KNA-server.local > srv-212-15-178-11.static.a1.hr: ICMP KNA-server.local udp port 51037 unreachable, length 158
+	IP (tos 0x0, ttl 117, id 407, offset 0, flags [none], proto UDP (17), length 150)
+    srv-212-15-178-11.static.a1.hr.60253 > KNA-server.local.51037: UDP, length 122
+12:19:31.274076 IP (tos 0xc0, ttl 64, id 23768, offset 0, flags [none], proto ICMP (1), length 56)
+    KNA-server.local > 91.193.43.43: ICMP KNA-server.local udp port asf-rmcp unreachable, length 36
+	IP (tos 0x0, ttl 247, id 53358, offset 0, flags [none], proto UDP (17), length 28)
+    91.193.43.43.44221 > KNA-server.local.asf-rmcp: UDP, length 0
+12:21:41.193271 IP (tos 0x0, ttl 51, id 17449, offset 0, flags [DF], proto ICMP (1), length 32)
+    isi-pinger1-2.cs-win.colostate.edu > KNA-server.local: ICMP echo request, id 50697, seq 3486, length 12
+12:21:41.193319 IP (tos 0x0, ttl 64, id 27452, offset 0, flags [none], proto ICMP (1), length 32)
+    KNA-server.local > isi-pinger1-2.cs-win.colostate.edu: ICMP echo reply, id 50697, seq 3486, length 12
+12:21:45.214442 IP (tos 0xc0, ttl 64, id 41905, offset 0, flags [none], proto ICMP (1), length 79)
+    KNA-server.local > 154.213.187.130: ICMP KNA-server.local udp port domain unreachable, length 59
+	IP (tos 0x0, ttl 56, id 31775, offset 0, flags [none], proto UDP (17), length 51)
+    154.213.187.130.59280 > KNA-server.local.domain: 6971+ ANY? ok.ru. (23)
+12:22:05.719193 IP (tos 0xc0, ttl 64, id 2406, offset 0, flags [none], proto ICMP (1), length 248)
+    KNA-server.local > px2.dawan.fr: ICMP KNA-server.local udp port ntp unreachable, length 228
+	IP (tos 0x0, ttl 54, id 36764, offset 0, flags [none], proto UDP (17), length 220)
+    px2.dawan.fr.53793 > KNA-server.local.ntp: NTPv2, length 192
+	Reserved, Leap indicator:  (0), Stratum 0 (unspecified), poll 3 (8s), precision 42
+	Root Delay: 0.000000, Root dispersion: 0.000000, Reference-ID: (unspec)
+	  Reference Timestamp:  0.000000000
+	  Originator Timestamp: 0.000000000
+	  Receive Timestamp:    0.000000000
+	  Transmit Timestamp:   0.000000000
+	    Originator - Receive Timestamp:  0.000000000
+	    Originator - Transmit Timestamp: 0.000000000
+12:26:00.812429 IP (tos 0xd0, ttl 64, id 45494, offset 0, flags [none], proto ICMP (1), length 68)
+    KNA-server.local > 91.206.15.2: ICMP KNA-server.local udp port 53962 unreachable, length 48
+	IP (tos 0x10, ttl 57, id 48080, offset 0, flags [DF], proto UDP (17), length 40)
+    91.206.15.2.8366 > KNA-server.local.53962: UDP, length 12
+12:26:10.456735 IP (tos 0xc0, ttl 64, id 40883, offset 0, flags [none], proto ICMP (1), length 576)
+    KNA-server.local > 219-89-140-146-adsl.sparkbb.co.nz: ICMP KNA-server.local udp port 44773 unreachable, length 556
+	IP (tos 0x0, ttl 52, id 48299, offset 0, flags [none], proto UDP (17), length 1052)
+    219-89-140-146-adsl.sparkbb.co.nz.40429 > KNA-server.local.44773: UDP, length 1024
+12:30:41.658469 IP (tos 0xc0, ttl 64, id 36530, offset 0, flags [none], proto ICMP (1), length 60)
+    KNA-server.local > 123.170.40.208: ICMP KNA-server.local udp port ntp unreachable, length 40
+	IP (tos 0x0, ttl 54, id 0, offset 0, flags [DF], proto UDP (17), length 32)
+    123.170.40.208.6978 > KNA-server.local.ntp: NTPv3, length 4
+	Server, Leap indicator:  (0), Stratum 0 (unspecified), poll 0 (1s), precision 0 [|ntp]
+12:30:42.021632 IP (tos 0xc0, ttl 64, id 626, offset 0, flags [none], proto ICMP (1), length 60)
+    KNA-server.local > 182.47.218.35: ICMP KNA-server.local udp port ntp unreachable, length 40
+	IP (tos 0x0, ttl 54, id 0, offset 0, flags [DF], proto UDP (17), length 32)
+    182.47.218.35.60549 > KNA-server.local.ntp: NTPv3, length 4
+	Server, Leap indicator:  (0), Stratum 0 (unspecified), poll 0 (1s), precision 0 [|ntp]
+12:30:50.104077 IP (tos 0xc0, ttl 64, id 15695, offset 0, flags [none], proto ICMP (1), length 100)
+    KNA-server.local > one.one.one.one: ICMP KNA-server.local udp port 60509 unreachable, length 80
+	IP (tos 0x0, ttl 58, id 450, offset 0, flags [DF], proto UDP (17), length 72)
+    one.one.one.one.domain > KNA-server.local.60509: 3015 ServFail 0/0/0 (44)
+12:30:54.998818 IP (tos 0xc0, ttl 64, id 18711, offset 0, flags [none], proto ICMP (1), length 100)
+    KNA-server.local > one.one.one.one: ICMP KNA-server.local udp port 43378 unreachable, length 80
+	IP (tos 0x0, ttl 59, id 27683, offset 0, flags [DF], proto UDP (17), length 72)
+    one.one.one.one.domain > KNA-server.local.43378: 3015 ServFail 0/0/0 (44)
+12:31:00.677817 IP (tos 0xc0, ttl 64, id 23194, offset 0, flags [none], proto ICMP (1), length 99)
+    KNA-server.local > 154.213.187.218: ICMP KNA-server.local udp port domain unreachable, length 79
+	IP (tos 0x0, ttl 247, id 54321, offset 0, flags [none], proto UDP (17), length 71)
+    154.213.187.218.15064 > KNA-server.local.domain: 61928+ [1au] ANY? sl. (43)
+12:32:38.921379 IP (tos 0x0, ttl 54, id 32165, offset 0, flags [DF], proto ICMP (1), length 28)
+    unn-95-168-201-31.superhosting.cz > KNA-server.local: ICMP echo request, id 20, seq 0, length 8
+12:32:38.921443 IP (tos 0x0, ttl 64, id 11653, offset 0, flags [none], proto ICMP (1), length 28)
+    KNA-server.local > unn-95-168-201-31.superhosting.cz: ICMP echo reply, id 20, seq 0, length 8
+^C
+28 packets captured
+32 packets received by filter
+0 packets dropped by kernel
+[root@KNA-server ~]# sudo iptables -L -n -v
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  veth0  eth0    0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  eth0   veth0   0.0.0.0/0            0.0.0.0/0           
+
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+[root@KNA-server ~]# sudo iptables -t nat -L -n -v
+Chain PREROUTING (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain POSTROUTING (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 MASQUERADE  all  --  *      eth0    192.168.100.0/24     0.0.0.0/0           
+    8   560 MASQUERADE  all  --  *      enp0s5  192.168.100.0/24     0.0.0.0/0           
+
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+[root@KNA-server ~]# ip addr show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2: enp0s5: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether ca:0b:52:90:e7:93 brd ff:ff:ff:ff:ff:ff
+    inet 93.183.72.17/24 brd 93.183.72.255 scope global noprefixroute enp0s5
+       valid_lft forever preferred_lft forever
+4: veth0@if3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 32:e3:00:b8:8f:1e brd ff:ff:ff:ff:ff:ff link-netns nginx_ns
+    inet 192.168.1.1/24 scope global veth0
+       valid_lft forever preferred_lft forever
+    inet 192.168.100.1/24 scope global veth0
+       valid_lft forever preferred_lft forever
+[root@KNA-server ~]# ip route show
+default via 93.183.72.1 dev enp0s5 proto static metric 100 
+93.183.72.0/24 dev enp0s5 proto kernel scope link src 93.183.72.17 metric 100 
+192.168.1.0/24 dev veth0 proto kernel scope link src 192.168.1.1 
+192.168.100.0/24 dev veth0 proto kernel scope link src 192.168.100.1 

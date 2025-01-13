@@ -1,0 +1,53 @@
+[root@KNA-server ~]# cd /etc/firewalld/services/
+[root@KNA-server services]# nano
+#<?xml version="1.0" encoding="utf-8"?>
+#<service>
+#  <short>My Service</short>
+#  <description>Custom service for port 12345</description>
+#  <port protocol="tcp" port="12345"/>
+#</service>
+[root@KNA-server ~]# sudo firewall-cmd --zone=public --add-service=my-service --permanent
+Warning: ALREADY_ENABLED: my-service
+success
+[root@KNA-server ~]# sudo firewall-cmd --reload
+success
+[root@KNA-server ~]# sudo firewall-cmd --zone=public --add-rich-rule='rule family="ipv4" source address="<166.1.157.30.40417>" port port="12345" protocol="tcp" reject' --permanent
+[root@KNA-server ~]# sudo firewall-cmd --reload
+[root@KNA-server ~]# sudo firewall-cmd --zone=public --list-all
+public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: enp0s5
+  sources: 
+  services: cockpit dhcpv6-client my-service ssh
+  ports: 
+  protocols: 
+  forward: no
+  masquerade: no
+  forward-ports: 
+  source-ports: 
+  icmp-blocks: 
+  rich rules: 
+	rule family="ipv4" source address="166.1.157.30" port port="12345" protocol="tcp" reject
+[root@KNA-server ~]# sudo iptables -A INPUT -p tcp --dport 22 -s 192.168.1.100 -j ACCEPT
+[root@KNA-server ~]# sudo iptables -A INPUT -p tcp --dport 22 -s 192.168.1.101 -j ACCEPT
+[root@KNA-server ~]# sudo iptables -A INPUT -p tcp --dport 22 -s 166.1.157.30 -j ACCEPT
+[root@KNA-server ~]# sudo iptables -A INPUT -p tcp --dport 22 -j DROP
+[root@KNA-server ~]# sudo service iptables save
+[root@KNA-server ~]# sudo iptables -L -v -n
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     tcp  --  *      *       192.168.1.100        0.0.0.0/0            tcp dpt:22
+    0     0 ACCEPT     tcp  --  *      *       192.168.1.101        0.0.0.0/0            tcp dpt:22
+  176 16102 ACCEPT     tcp  --  *      *       166.1.157.30         0.0.0.0/0            tcp dpt:22
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  veth0  eth0    0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  eth0   veth0   0.0.0.0/0            0.0.0.0/0           
+
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+[root@KNA-server ~]# 
+
+
